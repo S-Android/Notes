@@ -4,6 +4,8 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'kotlin-kapt'
+
 android {
     compileSdkVersion 28
     defaultConfig {
@@ -12,7 +14,7 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -21,14 +23,57 @@ android {
         }
     }
 }
+ext {
+    appCompactVersion = '28.0.0'
+    constraintLayoutVersion = '1.1.3'
+    recyclerViewVersion = '28.0.0'
+    daggerVersion = '2.21'
+    retrofitVersion = '2.3.0'
+    okHttp3Version = '3.10.0'
+    firebaseCoreVersion = '16.0.8'
+    firebaseAuthVersion = '16.2.0'
+    firestoreVersion = '18.1.0'
+    roomDBVersion = '1.1.1'
+    lifecycle = '1.1.1'
+}
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.0.0-beta01'
-    implementation 'androidx.core:core-ktx:1.1.0-alpha04'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.2'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.1.0-alpha4'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-alpha4'
+
+    /** app compact */
+    implementation "com.android.support:appcompat-v7:$appCompactVersion"
+
+    /** constraint layout */
+    implementation "com.android.support.constraint:constraint-layout:$constraintLayoutVersion"
+
+    /** recycler view */
+    implementation "com.android.support:recyclerview-v7:$recyclerViewVersion"
+
+    /** dagger */
+    implementation "com.google.dagger:dagger:$daggerVersion"
+    implementation "com.google.dagger:dagger-android:$daggerVersion"
+    implementation "com.google.dagger:dagger-android-support:$daggerVersion"
+    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
+    kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
+
+    /** retrofit */
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okHttp3Version"
+
+
+    /** FireBase */
+    implementation "com.google.firebase:firebase-core:$firebaseCoreVersion"
+    implementation "com.google.firebase:firebase-auth:$firebaseAuthVersion"
+    implementation "com.google.firebase:firebase-firestore:$firestoreVersion"
+
+    /** ViewModel */
+    implementation "android.arch.lifecycle:extensions:$lifecycle"
+    annotationProcessor "android.arch.lifecycle:compiler:$lifecycle"
+
+    /** RoomDB */
+    implementation "android.arch.persistence.room:runtime:$roomDBVersion"
+    kapt "android.arch.persistence.room:compiler:$roomDBVersion"
 }
