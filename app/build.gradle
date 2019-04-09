@@ -48,6 +48,7 @@ ext {
     roomDBVersion = '1.1.1'
     lifecycle = '1.1.1'
     coroutineVersion = '1.2.0-alpha-2'
+    workmangerVersion = '2.0.0'
 }
 
 dependencies {
@@ -76,7 +77,6 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
     implementation "com.squareup.okhttp3:logging-interceptor:$okHttp3Version"
 
-
     /** FireBase */
     implementation "com.google.firebase:firebase-core:$firebaseCoreVersion"
     implementation "com.google.firebase:firebase-auth:$firebaseAuthVersion"
@@ -93,4 +93,8 @@ dependencies {
     /** Coroutines */
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutineVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutineVersion"
+
+    /** workmanger */
+    implementation "androidx.work:work-runtime:$workmangerVersion"
+
 }

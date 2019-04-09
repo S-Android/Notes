@@ -36,6 +36,14 @@ class SplashFragment: BaseFragment<SplashFragmentViewModel, SplashFragmentCompon
         mViewModel?.splashTimerLiveData?.observe(this, Observer {
             Toast.makeText(this@SplashFragment.activity, "hello world", Toast.LENGTH_SHORT).show()
         })
+
+        mViewModel?.repository?.workManager?.getWorkInfoByIdLiveData(mViewModel?.oneTimeRequest!!.id)?.observe(this, Observer {
+            if (it.state.isFinished) {
+                val message = it.outputData.getString("output_message")
+                Toast.makeText(this@SplashFragment.activity, "work finished $message", Toast.LENGTH_SHORT).show()
+            }
+        })
+
         mViewModel?.init()
     }
 

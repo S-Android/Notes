@@ -1,6 +1,7 @@
 package com.example.notes.core.dagger.modules
 
 import android.content.Context
+import androidx.work.WorkManager
 import com.example.notes.NotesApplication
 import com.example.notes.core.dagger.qualifiers.ApplicationContext
 import com.example.notes.core.dagger.scopes.ApplicationScope
@@ -28,4 +29,11 @@ class ApplicationModule(private val application: NotesApplication) {
     fun provideNotesDatabase(): NotesDatabase {
         return NotesDatabase.getDatabase(application)
     }
+
+    @ApplicationScope
+    @Provides
+    fun provideWorkManager(): WorkManager {
+        return WorkManager.getInstance()
+    }
+
 }
