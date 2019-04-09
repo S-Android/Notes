@@ -1,29 +1,31 @@
 package com.example.notes.modules.splash.fragments.dagger
 
+import android.content.Context
 import androidx.lifecycle.ViewModelProvider
-import com.example.notes.core.base.BaseActivity
-import com.example.notes.core.dagger.qualifiers.FragmentLevelFactoryProvider
+import com.example.notes.core.repository.Repository
+import com.example.notes.core.dagger.qualifiers.ApplicationContext
 import com.example.notes.core.dagger.scopes.FragmentScope
 import com.example.notes.core.viewmodel.ViewModelProviderFactory
-import com.example.notes.modules.splash.activity.dagger.SplashActivityComponent
 import com.example.notes.modules.splash.fragments.SplashFragment
+import com.example.notes.modules.splash.fragments.repository.SplashRepository
 import com.example.notes.modules.splash.fragments.viewmodel.SplashFragmentViewModel
 import dagger.Module
 import dagger.Provides
+import javax.inject.Named
 
 @Module
 class SplashFragmentModule(private val splashFragment: SplashFragment) {
     @FragmentScope
-    @FragmentLevelFactoryProvider
+    @Named("FragmentLevelFactoryProvider")
     @Provides
-    fun provideSplashFragmentViewModel(): SplashFragmentViewModel {
-        return SplashFragmentViewModel()
+    fun provideSplashFragmentViewModel(@ApplicationContext context: Context, repository: SplashRepository): SplashFragmentViewModel {
+        return SplashFragmentViewModel(context, repository)
     }
 
     @FragmentScope
-    @FragmentLevelFactoryProvider
+    @Named("FragmentLevelFactoryProvider")
     @Provides
-    fun provideViewModelFactory(viewModel: SplashFragmentViewModel):  ViewModelProvider.Factory {
+    fun provideViewModelFactory(@Named("FragmentLevelFactoryProvider") viewModel: SplashFragmentViewModel):  ViewModelProvider.Factory {
         return ViewModelProviderFactory(viewModel)
     }
 }
