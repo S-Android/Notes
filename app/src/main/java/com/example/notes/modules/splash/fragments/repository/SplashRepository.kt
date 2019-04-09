@@ -7,7 +7,7 @@ import com.example.notes.core.database.NotesDatabase
 import kotlinx.coroutines.*
 import javax.inject.Inject
 import androidx.work.OneTimeWorkRequest
-import com.example.notes.workmanager.DummyWorker
+import com.example.notes.core.workmanager.DummyWorker
 
 
 class SplashRepository @Inject constructor(private val notesDatabase: NotesDatabase, val workManager: WorkManager) {

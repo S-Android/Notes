@@ -1,8 +1,6 @@
-package com.example.notes.workmanager
+package com.example.notes.core.workmanager
 
 import android.content.Context
-import android.graphics.BitmapFactory
-import androidx.work.ListenableWorker
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.example.notes.R
