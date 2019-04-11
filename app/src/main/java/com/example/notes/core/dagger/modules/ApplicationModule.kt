@@ -6,6 +6,9 @@ import com.example.notes.NotesApplication
 import com.example.notes.core.dagger.qualifiers.ApplicationContext
 import com.example.notes.core.dagger.scopes.ApplicationScope
 import com.example.notes.core.database.NotesDatabase
+import com.example.notes.core.firebase.NotesFirebase
+import com.example.notes.core.workmanager.NotesWorkManager
+import com.google.firebase.database.FirebaseDatabase
 import dagger.Module
 import dagger.Provides
 
@@ -32,8 +35,13 @@ class ApplicationModule(private val application: NotesApplication) {
 
     @ApplicationScope
     @Provides
-    fun provideWorkManager(): WorkManager {
-        return WorkManager.getInstance()
+    fun provideWorkManager(): NotesWorkManager {
+        return NotesWorkManager.getNotesWorker()!!
     }
 
+    @ApplicationScope
+    @Provides
+    fun provideFirebase(): NotesFirebase {
+        return NotesFirebase.getFirebaseInstance()!!
+    }
 }

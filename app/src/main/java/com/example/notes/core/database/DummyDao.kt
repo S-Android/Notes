@@ -7,5 +7,5 @@ import androidx.room.OnConflictStrategy
 @Dao
 interface DummyDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(comments: List<String>)
+    fun insertAll(comments: String)
 }

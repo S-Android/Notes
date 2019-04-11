@@ -4,6 +4,7 @@ import android.app.Application
 import com.example.notes.core.dagger.components.ApplicationComponent
 import com.example.notes.core.dagger.components.DaggerApplicationComponent
 import com.example.notes.core.dagger.modules.ApplicationModule
+import com.facebook.stetho.Stetho
 
 class NotesApplication: Application() {
     lateinit var mAppComponent: ApplicationComponent
@@ -22,6 +23,8 @@ class NotesApplication: Application() {
         mAppComponent = DaggerApplicationComponent.builder()
             .applicationModule(ApplicationModule(this))
             .build()
+
+        Stetho.initializeWithDefaults(this)
     }
 
     fun getAppComponent(): ApplicationComponent {

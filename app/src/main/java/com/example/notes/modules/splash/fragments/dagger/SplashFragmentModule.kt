@@ -1,9 +1,7 @@
 package com.example.notes.modules.splash.fragments.dagger
 
-import android.content.Context
 import androidx.lifecycle.ViewModelProvider
-import com.example.notes.core.repository.Repository
-import com.example.notes.core.dagger.qualifiers.ApplicationContext
+import com.example.notes.NotesApplication
 import com.example.notes.core.dagger.scopes.FragmentScope
 import com.example.notes.core.viewmodel.ViewModelProviderFactory
 import com.example.notes.modules.splash.fragments.SplashFragment
@@ -18,8 +16,8 @@ class SplashFragmentModule(private val splashFragment: SplashFragment) {
     @FragmentScope
     @Named("FragmentLevelFactoryProvider")
     @Provides
-    fun provideSplashFragmentViewModel(@ApplicationContext context: Context, repository: SplashRepository): SplashFragmentViewModel {
-        return SplashFragmentViewModel(context, repository)
+    fun provideSplashFragmentViewModel(application: NotesApplication, repository: SplashRepository): SplashFragmentViewModel {
+        return SplashFragmentViewModel(application, repository)
     }
 
     @FragmentScope

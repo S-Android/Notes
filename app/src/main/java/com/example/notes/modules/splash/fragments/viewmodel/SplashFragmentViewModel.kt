@@ -1,18 +1,16 @@
 package com.example.notes.modules.splash.fragments.viewmodel
 
-import android.content.Context
 import android.widget.Toast
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.work.OneTimeWorkRequest
-import androidx.work.WorkInfo
+import com.example.notes.NotesApplication
 import com.example.notes.core.base.BaseViewModel
 import com.example.notes.modules.splash.fragments.repository.SplashRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
-class SplashFragmentViewModel (private val context: Context, val repository: SplashRepository) : BaseViewModel(context) {
+class SplashFragmentViewModel (private val context: NotesApplication, val repository: SplashRepository) : BaseViewModel(context) {
     val splashTimerLiveData = MutableLiveData<Int>()
     var oneTimeRequest: OneTimeWorkRequest = repository.getOneTimeWorkRequest()
 
@@ -27,7 +25,7 @@ class SplashFragmentViewModel (private val context: Context, val repository: Spl
             }
 
             delay(2000)
-            repository.workManager.enqueue(oneTimeRequest)
+            repository.workManager.workManager!!.enqueue(oneTimeRequest)
         }
     }
 }

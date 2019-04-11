@@ -44,11 +44,14 @@ ext {
     okHttp3Version = '3.10.0'
     firebaseCoreVersion = '16.0.8'
     firebaseAuthVersion = '16.2.0'
+    firebaseDatabaseVersion = '16.1.0'
+    firebaseStorageVersion = '16.1.0'
     firestoreVersion = '18.2.0'
     roomDBVersion = '1.1.1'
     lifecycle = '1.1.1'
     coroutineVersion = '1.2.0-alpha-2'
     workmangerVersion = '2.0.0'
+    stethoVersion = '1.5.1'
 }
 
 dependencies {
@@ -80,7 +83,8 @@ dependencies {
     /** FireBase */
     implementation "com.google.firebase:firebase-core:$firebaseCoreVersion"
     implementation "com.google.firebase:firebase-auth:$firebaseAuthVersion"
-    implementation "com.google.firebase:firebase-firestore:$firestoreVersion"
+    implementation "com.google.firebase:firebase-database:$firebaseDatabaseVersion"
+    implementation "com.google.firebase:firebase-storage:$firebaseStorageVersion"
 
     /** ViewModel */
     implementation "android.arch.lifecycle:extensions:$lifecycle"
@@ -97,4 +101,9 @@ dependencies {
     /** workmanger */
     implementation "androidx.work:work-runtime:$workmangerVersion"
 
+    /** room database debugging */
+    implementation "com.facebook.stetho:stetho:$stethoVersion"
+
 }
+
+apply plugin: 'com.google.gms.google-services'

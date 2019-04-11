@@ -6,17 +6,17 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 
 abstract class BaseFragment<viewModel: ViewModel, component: BaseComponent>: Fragment() {
-    protected var mViewModel: viewModel?  = null
-    private var mDaggerComponent: component? = null
+    var viewModel: viewModel?  = null
+    var daggerComponent: component? = null
 
-    abstract fun setUpDaggerComponent(): component?
-    abstract fun setUpViewModel(): viewModel?
+    abstract fun setUpDaggerComponent()
+    abstract fun setUpViewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mDaggerComponent = setUpDaggerComponent()
-        mViewModel = setUpViewModel()
+        setUpDaggerComponent()
+        setUpViewModel()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

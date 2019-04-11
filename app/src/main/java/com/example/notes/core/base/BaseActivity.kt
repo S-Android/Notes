@@ -4,16 +4,16 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 
-abstract class BaseActivity: AppCompatActivity() {
-    private var mViewModel: ViewModel?  = null
-    var mDaggerComponent: BaseComponent? = null
+abstract class BaseActivity<viewModel: ViewModel, daggerComponent: BaseComponent>: AppCompatActivity() {
+    var viewModel: viewModel?  = null
+    var daggerComponent: daggerComponent? = null
 
-    abstract fun setUpDaggerComponent(): BaseComponent?
-    abstract fun setUpViewModel(): ViewModel?
+    abstract fun setUpDaggerComponent()
+    abstract fun setUpViewModel()
 
     companion object {
-        private lateinit var mInstance: BaseActivity
-        fun getInstance(): BaseActivity {
+        private lateinit var mInstance: BaseActivity<*, *>
+        fun getInstance(): BaseActivity<*, *> {
             return mInstance
         }
     }
@@ -22,7 +22,7 @@ abstract class BaseActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         mInstance = this
 
-        mDaggerComponent = setUpDaggerComponent()
-        mViewModel = setUpViewModel()
+        setUpDaggerComponent()
+        setUpViewModel()
     }
 }

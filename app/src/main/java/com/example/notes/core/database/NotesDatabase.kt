@@ -4,9 +4,14 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.notes.models.roomdbmodel.FolderEntity
+import com.example.notes.models.roomdbmodel.NoteEntity
+import com.example.notes.models.roomdbmodel.NotesDao
 
-@Database(entities = [DummyEntity::class], version = 1)
+@Database(entities = [FolderEntity::class, NoteEntity::class], version = 1)
 abstract class NotesDatabase: RoomDatabase() {
+    abstract fun getNotesDao(): NotesDao
+
     companion object {
         @Volatile
         private var INSTANCE: NotesDatabase? = null

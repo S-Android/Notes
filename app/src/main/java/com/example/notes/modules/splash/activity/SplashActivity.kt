@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.notes.NotesApplication
 import com.example.notes.R
 import com.example.notes.core.base.BaseActivity
-import com.example.notes.core.base.BaseComponent
 import com.example.notes.core.dagger.qualifiers.ActivityContext
 import com.example.notes.core.dagger.qualifiers.ActivityLevelFactoryProvider
 import com.example.notes.core.dagger.qualifiers.ApplicationContext
@@ -18,7 +17,7 @@ import com.example.notes.modules.splash.activity.viewmodel.SplashActivityViewMod
 
 import javax.inject.Inject
 
-class SplashActivity: BaseActivity() {
+class SplashActivity: BaseActivity<SplashActivityViewModel, SplashActivityComponent>() {
     @Inject
     @field:ApplicationContext
     lateinit var  appContext1: Context
@@ -38,8 +37,6 @@ class SplashActivity: BaseActivity() {
     @Inject lateinit var mSplashFragment: Fragment
     @Inject @field:ActivityLevelFactoryProvider lateinit var factory: ViewModelProvider.Factory
 
-    var mSplashActivityComponent: SplashActivityComponent? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
@@ -50,17 +47,15 @@ class SplashActivity: BaseActivity() {
             .commit()
     }
 
-    override fun setUpViewModel(): SplashActivityViewModel? {
-        return ViewModelProviders.of(this, factory).get(SplashActivityViewModel::class.java)
+    override fun setUpDaggerComponent() {
+        if (daggerComponent == null) {
+            daggerComponent = NotesApplication.getInstance().getAppComponent()
+                .addSubComponent(SplashActivityModule(this))
+            daggerComponent?.inject(this)
+        }
     }
 
-    override fun setUpDaggerComponent(): SplashActivityComponent? {
-        if (mSplashActivityComponent == null) {
-            mSplashActivityComponent = NotesApplication.getInstance().getAppComponent()
-                .splashActivityComponent(SplashActivityModule(this))
-            mSplashActivityComponent?.inject(this)
-        }
-
-        return mSplashActivityComponent
+    override fun setUpViewModel() {
+        viewModel = ViewModelProviders.of(this, factory).get(SplashActivityViewModel::class.java)
     }
 }

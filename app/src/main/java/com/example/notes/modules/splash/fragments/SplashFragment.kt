@@ -10,9 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.example.notes.R
 import com.example.notes.core.base.BaseActivity
-import com.example.notes.core.base.BaseComponent
 import com.example.notes.core.base.BaseFragment
-import com.example.notes.core.dagger.qualifiers.FragmentLevelFactoryProvider
 import com.example.notes.modules.splash.activity.dagger.SplashActivityComponent
 import com.example.notes.modules.splash.fragments.dagger.SplashFragmentComponent
 import com.example.notes.modules.splash.fragments.dagger.SplashFragmentModule
@@ -24,8 +22,6 @@ class SplashFragment: BaseFragment<SplashFragmentViewModel, SplashFragmentCompon
 
     @Inject @field:Named("FragmentLevelFactoryProvider") lateinit var factory: ViewModelProvider.Factory
 
-    var mSplashFragmentComponent: SplashFragmentComponent? = null
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_splash, container, false)
     }
@@ -33,32 +29,31 @@ class SplashFragment: BaseFragment<SplashFragmentViewModel, SplashFragmentCompon
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        mViewModel?.splashTimerLiveData?.observe(this, Observer {
+        viewModel?.splashTimerLiveData?.observe(this, Observer {
             Toast.makeText(this@SplashFragment.activity, "hello world", Toast.LENGTH_SHORT).show()
         })
 
-        mViewModel?.repository?.workManager?.getWorkInfoByIdLiveData(mViewModel?.oneTimeRequest!!.id)?.observe(this, Observer {
+        viewModel?.repository?.workManager?.workManager?.getWorkInfoByIdLiveData(viewModel?.oneTimeRequest!!.id)?.observe(this, Observer {
             if (it.state.isFinished) {
                 val message = it.outputData.getString("output_message")
                 Toast.makeText(this@SplashFragment.activity, "work finished $message", Toast.LENGTH_SHORT).show()
             }
         })
 
-        mViewModel?.init()
+        viewModel?.init()
     }
 
-    override fun setUpViewModel(): SplashFragmentViewModel? {
-        return ViewModelProviders.of(this, factory).get(SplashFragmentViewModel::class.java)
-    }
-
-    override fun setUpDaggerComponent(): SplashFragmentComponent? {
-        if (mSplashFragmentComponent == null) {
-            val component = BaseActivity.getInstance().mDaggerComponent
+    override fun setUpDaggerComponent() {
+        if (daggerComponent == null) {
+            val component = BaseActivity.getInstance().daggerComponent
             if (component is SplashActivityComponent) {
-                mSplashFragmentComponent = component.splashFragmentComponent(SplashFragmentModule(this))
-                mSplashFragmentComponent?.inject(this)
+                daggerComponent = component.splashFragmentComponent(SplashFragmentModule(this))
+                daggerComponent?.inject(this)
             }
         }
-        return mSplashFragmentComponent
+    }
+
+    override fun setUpViewModel() {
+        viewModel = ViewModelProviders.of(this, factory).get(SplashFragmentViewModel::class.java)
     }
 }
