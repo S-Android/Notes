@@ -12,6 +12,15 @@ class NoteEntity {
     @ColumnInfo(name = "name")
     var text: String? = null
 
-    @ColumnInfo(name = "folder_id")
-    var folderId: String? = null
+    @ColumnInfo(name = "firebase_id")
+    var firebaseId: String? = null
+
+    @ColumnInfo(name = "parent_firebase_id")
+    var parentFirebaseId: String? = null
+
+    @ColumnInfo(name = "is_synced")
+    var isSynced: Boolean? = null
+
+    @ColumnInfo(name = "is_deleted")
+    var isDeleted: Boolean? = null
 }

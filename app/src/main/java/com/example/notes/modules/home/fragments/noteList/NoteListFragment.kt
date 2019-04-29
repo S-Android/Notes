@@ -1,4 +1,4 @@
-package com.example.notes.modules.home.fragments.folderlist
+package com.example.notes.modules.home.fragments.noteList
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,14 +14,15 @@ import com.example.notes.core.base.BaseActivity
 import com.example.notes.core.base.BaseFragment
 import com.example.notes.core.dagger.qualifiers.ActivityLevelFactoryProvider
 import com.example.notes.models.firebasedbmodel.FirebaseDBFolder
+import com.example.notes.models.firebasedbmodel.FirebaseDBNote
 import com.example.notes.models.uimodel.FolderModel
 import com.example.notes.models.uimodel.NoteModel
 import com.example.notes.modules.home.activity.dagger.HomeComponent
 import com.example.notes.modules.home.activity.viewmodel.HomeViewModel
+import com.example.notes.modules.home.fragments.addNote.AddNoteFragment
 import com.example.notes.modules.home.fragments.addfolder.AddFolderFragment
-import com.example.notes.modules.home.fragments.folderlist.dagger.FolderListComponent
-import com.example.notes.modules.home.fragments.folderlist.dagger.FolderListModule
-import com.example.notes.modules.home.fragments.noteList.NoteListFragment
+import com.example.notes.modules.home.fragments.noteList.dagger.NoteListComponent
+import com.example.notes.modules.home.fragments.noteList.dagger.NoteListModule
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -30,51 +31,45 @@ import kotlinx.android.synthetic.main.adapter_folders_item.view.*
 import kotlinx.android.synthetic.main.fragment_folders.*
 import javax.inject.Inject
 
-class FolderListFragment: BaseFragment<HomeViewModel, FolderListComponent>() {
+class NoteListFragment: BaseFragment<HomeViewModel, NoteListComponent>() {
     @Inject
     @field:ActivityLevelFactoryProvider
     lateinit var factory: ViewModelProvider.Factory
 
+    var folderId: String? = null
+//    var notes: List<NoteModel>? = null
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_folders, container, false)
+        return inflater.inflate(R.layout.fragment_notes, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         rv.layoutManager = LinearLayoutManager(activity)
-
+//        rv.adapter = NoteAdapter(notes!!)
         bt.setOnClickListener {
-            AddFolderFragment()
-                .show(activity?.supportFragmentManager, "")
+            val addNoteFragment = AddNoteFragment()
+            addNoteFragment.parentFirebaseId = folderId
+            addNoteFragment.show(activity?.supportFragmentManager, "")
         }
     }
 
     override fun onStart() {
         super.onStart()
 
-        val databaseReference = FirebaseDatabase.getInstance().getReference("123/folders/")
+        val databaseReference = FirebaseDatabase.getInstance().getReference("123/folders/$folderId/notes/")
         databaseReference.addValueEventListener(object: ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val list = ArrayList<FolderModel>()
+                val list = ArrayList<NoteModel>()
                 for (childDataSnapshot in dataSnapshot.children) {
-                    val firebaseFolder = childDataSnapshot.getValue(FirebaseDBFolder::class.java)
-                    val uiFolderModel = FolderModel(firebaseFolder!!.name)
-                    uiFolderModel.firebaseId = childDataSnapshot.key!!
+                    val firebaseNote = childDataSnapshot.getValue(FirebaseDBNote::class.java)
+                    val uiNoteModel = NoteModel(firebaseNote!!.note)
 
-                    val notes = ArrayList<NoteModel>()
-                    for (entry in firebaseFolder.notes) {
-                        val noteModel = NoteModel(entry.value.note)
-                        noteModel.firebaseId = entry.key
-                        notes.add(noteModel)
-                    }
-                    uiFolderModel.notes = notes
-
-                    list.add(uiFolderModel)
+                    list.add(uiNoteModel)
                 }
 
-                if (rv != null) rv.adapter = FoldersAdapter(list)
-                println("hello")
+                rv.adapter = NoteAdapter(list)
             }
             override fun onCancelled(p0: DatabaseError) {
                 TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
@@ -87,7 +82,7 @@ class FolderListFragment: BaseFragment<HomeViewModel, FolderListComponent>() {
         if (daggerComponent == null) {
             val component = BaseActivity.getInstance().daggerComponent
             if (component is HomeComponent) {
-                daggerComponent = component.addSubComponent(FolderListModule(this))
+                daggerComponent = component.addSubComponent(NoteListModule(this))
                 daggerComponent?.inject(this)
             }
         }
@@ -97,34 +92,24 @@ class FolderListFragment: BaseFragment<HomeViewModel, FolderListComponent>() {
         viewModel = ViewModelProviders.of(activity!!, factory).get(HomeViewModel::class.java)
     }
 
-    inner class FoldersAdapter(private val folders: List<FolderModel>): RecyclerView.Adapter<FoldersAdapter.FolderViewHolder>() {
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FolderViewHolder {
+    inner class NoteAdapter(private val folders: List<NoteModel>): RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
             val view = LayoutInflater.from(parent.context).inflate(R.layout.adapter_folders_item, null)
-            return FolderViewHolder(view)
+            return NoteViewHolder(view)
         }
 
         override fun getItemCount(): Int {
             return folders.size
         }
 
-        override fun onBindViewHolder(holder: FolderViewHolder, position: Int) {
+        override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
             holder.bind(folders[position])
         }
 
-        inner class FolderViewHolder(view: View): RecyclerView.ViewHolder(view) {
+        inner class NoteViewHolder(view: View): RecyclerView.ViewHolder(view) {
             private val tv: TextView = view.tv
-            fun bind(folder: FolderModel) {
-                tv.text = folder.name
-
-                itemView.setOnClickListener {
-                    val noteListFragment = NoteListFragment()
-                    noteListFragment.folderId = folder.firebaseId
-//                    noteListFragment.notes = folder.notes
-                    activity?.supportFragmentManager?.beginTransaction()!!
-                        .replace(R.id.main_container, noteListFragment)
-                        .addToBackStack(null)
-                        .commit()
-                }
+            fun bind(folder: NoteModel) {
+                tv.text = folder.note
             }
         }
     }

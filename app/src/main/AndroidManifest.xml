@@ -15,7 +15,7 @@
             android:name=".NotesApplication"
             tools:ignore="GoogleAppIndexingWarning">
         <activity
-                android:name=".modules.splash.activity.SplashActivity"
+                android:name=".modules.home.activity.HomeActivity"
                 android:theme="@style/splashScreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

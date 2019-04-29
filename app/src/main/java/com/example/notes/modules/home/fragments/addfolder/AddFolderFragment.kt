@@ -11,8 +11,6 @@ import com.example.notes.models.firebasedbmodel.FirebaseDBFolder
 import com.example.notes.models.firebasedbmodel.FirebaseDBNote
 import com.example.notes.models.roomdbmodel.FolderEntity
 import com.example.notes.models.roomdbmodel.NoteEntity
-import com.example.notes.models.uimodel.FolderModel
-import com.example.notes.models.uimodel.NoteModel
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -32,8 +30,8 @@ class AddFolderFragment: DialogFragment() {
 
             val folderName = et.text.toString()
             val folder = FirebaseDBFolder(folderName)
-            folder.notes.put("note1", FirebaseDBNote("today need to pick some soup"))
-            folder.notes.put("note2", FirebaseDBNote("play cricket at 8 pm"))
+//            folder.notes.put("note1", FirebaseDBNote("today need to pick some soup"))
+//            folder.notes.put("note2", FirebaseDBNote("play cricket at 8 pm"))
 
             val id = databaseReference.push().key
             databaseReference.child(id!!).setValue(folder, object: DatabaseReference.CompletionListener {
@@ -47,15 +45,15 @@ class AddFolderFragment: DialogFragment() {
                         folderEntity.name = folderName
                         NotesDatabase.getDatabase(activity!!.applicationContext).getNotesDao().insert(folderEntity)
 
-                        val noteEntity1 = NoteEntity()
-                        noteEntity1.text = "today need to pick some soup"
-                        noteEntity1.folderId = folderEntity.firebaseId
-                        NotesDatabase.getDatabase(activity!!.applicationContext).getNotesDao().insert(noteEntity1)
-
-                        val noteEntity2 = NoteEntity()
-                        noteEntity2.text = "play cricket at 8 pm"
-                        noteEntity2.folderId = folderEntity.firebaseId
-                        NotesDatabase.getDatabase(activity!!.applicationContext).getNotesDao().insert(noteEntity2)
+//                        val noteEntity1 = NoteEntity()
+//                        noteEntity1.text = "today need to pick some soup"
+//                        noteEntity1.firebaseId = folderEntity.firebaseId
+//                        NotesDatabase.getDatabase(activity!!.applicationContext).getNotesDao().insert(noteEntity1)
+//
+//                        val noteEntity2 = NoteEntity()
+//                        noteEntity2.text = "play cricket at 8 pm"
+//                        noteEntity2.firebaseId = folderEntity.firebaseId
+//                        NotesDatabase.getDatabase(activity!!.applicationContext).getNotesDao().insert(noteEntity2)
                     }).start()
                 }
             })

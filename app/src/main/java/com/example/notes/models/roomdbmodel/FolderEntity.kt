@@ -14,4 +14,10 @@ class FolderEntity {
 
     @ColumnInfo(name = "firebase_id")
     var firebaseId: String? = null
+
+    @ColumnInfo(name = "is_synced")
+    var isSynced: Boolean? = null
+
+    @ColumnInfo(name = "is_deleted")
+    var isDeleted: Boolean? = null
 }
