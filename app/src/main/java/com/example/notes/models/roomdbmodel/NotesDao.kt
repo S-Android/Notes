@@ -6,7 +6,7 @@ import androidx.room.OnConflictStrategy
 
 @Dao
 interface NotesDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert
     fun insert(folder: FolderEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

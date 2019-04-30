@@ -1,4 +1,4 @@
-package com.example.notes.modules.home.fragments.noteList
+package com.example.notes.modules.home.fragments.notelist
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,16 +13,13 @@ import com.example.notes.R
 import com.example.notes.core.base.BaseActivity
 import com.example.notes.core.base.BaseFragment
 import com.example.notes.core.dagger.qualifiers.ActivityLevelFactoryProvider
-import com.example.notes.models.firebasedbmodel.FirebaseDBFolder
 import com.example.notes.models.firebasedbmodel.FirebaseDBNote
-import com.example.notes.models.uimodel.FolderModel
 import com.example.notes.models.uimodel.NoteModel
 import com.example.notes.modules.home.activity.dagger.HomeComponent
 import com.example.notes.modules.home.activity.viewmodel.HomeViewModel
-import com.example.notes.modules.home.fragments.addNote.AddNoteFragment
-import com.example.notes.modules.home.fragments.addfolder.AddFolderFragment
-import com.example.notes.modules.home.fragments.noteList.dagger.NoteListComponent
-import com.example.notes.modules.home.fragments.noteList.dagger.NoteListModule
+import com.example.notes.modules.home.fragments.addnote.AddNoteFragment
+import com.example.notes.modules.home.fragments.notelist.dagger.NoteListComponent
+import com.example.notes.modules.home.fragments.notelist.dagger.NoteListModule
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase

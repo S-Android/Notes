@@ -5,8 +5,8 @@ import com.example.notes.core.dagger.scopes.ActivityScope
 import com.example.notes.modules.home.activity.HomeActivity
 import com.example.notes.modules.home.fragments.folderlist.dagger.FolderListComponent
 import com.example.notes.modules.home.fragments.folderlist.dagger.FolderListModule
-import com.example.notes.modules.home.fragments.noteList.dagger.NoteListComponent
-import com.example.notes.modules.home.fragments.noteList.dagger.NoteListModule
+import com.example.notes.modules.home.fragments.notelist.dagger.NoteListComponent
+import com.example.notes.modules.home.fragments.notelist.dagger.NoteListModule
 import dagger.Subcomponent
 
 @ActivityScope

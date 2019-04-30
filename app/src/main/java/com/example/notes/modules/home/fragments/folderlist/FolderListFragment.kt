@@ -21,7 +21,7 @@ import com.example.notes.modules.home.activity.viewmodel.HomeViewModel
 import com.example.notes.modules.home.fragments.addfolder.AddFolderFragment
 import com.example.notes.modules.home.fragments.folderlist.dagger.FolderListComponent
 import com.example.notes.modules.home.fragments.folderlist.dagger.FolderListModule
-import com.example.notes.modules.home.fragments.noteList.NoteListFragment
+import com.example.notes.modules.home.fragments.notelist.NoteListFragment
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase

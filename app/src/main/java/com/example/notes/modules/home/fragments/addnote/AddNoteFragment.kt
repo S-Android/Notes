@@ -1,4 +1,4 @@
-package com.example.notes.modules.home.fragments.addNote
+package com.example.notes.modules.home.fragments.addnote
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,9 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.example.notes.R
 import com.example.notes.core.database.NotesDatabase
-import com.example.notes.models.firebasedbmodel.FirebaseDBFolder
 import com.example.notes.models.firebasedbmodel.FirebaseDBNote
-import com.example.notes.models.roomdbmodel.FolderEntity
 import com.example.notes.models.roomdbmodel.NoteEntity
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
