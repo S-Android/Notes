@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,6 +14,7 @@ import com.example.notes.R
 import com.example.notes.core.base.BaseActivity
 import com.example.notes.core.base.BaseFragment
 import com.example.notes.core.dagger.qualifiers.ActivityLevelFactoryProvider
+import com.example.notes.core.database.NotesDatabase
 import com.example.notes.models.firebasedbmodel.FirebaseDBFolder
 import com.example.notes.models.uimodel.FolderModel
 import com.example.notes.models.uimodel.NoteModel
@@ -48,11 +50,23 @@ class FolderListFragment: BaseFragment<HomeViewModel, FolderListComponent>() {
             AddFolderFragment()
                 .show(activity?.supportFragmentManager, "")
         }
+
+        NotesDatabase.getDatabase(activity!!.applicationContext).getNotesDao().getFolders().observe(this, Observer {
+            val list = ArrayList<FolderModel>()
+
+            for (folderEntity in it) {
+                val folderModel = FolderModel(folderEntity.name!!)
+                if (folderEntity.firebaseId != null) folderModel.firebaseId = folderEntity.firebaseId!!
+
+                list.add(folderModel)
+            }
+            if (rv != null) rv.adapter = FoldersAdapter(list)
+        })
     }
 
     override fun onStart() {
         super.onStart()
-
+if (true) return
         val databaseReference = FirebaseDatabase.getInstance().getReference("123/folders/")
         databaseReference.addValueEventListener(object: ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
