@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,6 +14,7 @@ import com.example.notes.R
 import com.example.notes.core.base.BaseActivity
 import com.example.notes.core.base.BaseFragment
 import com.example.notes.core.dagger.qualifiers.ActivityLevelFactoryProvider
+import com.example.notes.core.database.NotesDatabase
 import com.example.notes.models.firebasedbmodel.FirebaseDBNote
 import com.example.notes.models.uimodel.NoteModel
 import com.example.notes.modules.home.activity.dagger.HomeComponent
@@ -50,11 +52,24 @@ class NoteListFragment: BaseFragment<HomeViewModel, NoteListComponent>() {
             addNoteFragment.parentFirebaseId = folderId
             addNoteFragment.show(activity?.supportFragmentManager, "")
         }
+
+        NotesDatabase.getDatabase(activity!!.applicationContext).getNotesDao().getNotes(folderId!!).observe(this, Observer {
+            val list = ArrayList<NoteModel>()
+
+            for (noteEntity in it) {
+                val noteModel = NoteModel(noteEntity.text!!)
+                if (noteEntity.firebaseId != null) noteModel.firebaseId = noteEntity.firebaseId!!
+                if (noteEntity.parentFirebaseId != null) noteModel.parentFirebaseId = noteEntity.parentFirebaseId!!
+
+                list.add(noteModel)
+            }
+            if (rv != null) rv.adapter = NoteAdapter(list)
+        })
     }
 
     override fun onStart() {
         super.onStart()
-
+        return
         val databaseReference = FirebaseDatabase.getInstance().getReference("123/folders/$folderId/notes/")
         databaseReference.addValueEventListener(object: ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -62,6 +77,7 @@ class NoteListFragment: BaseFragment<HomeViewModel, NoteListComponent>() {
                 for (childDataSnapshot in dataSnapshot.children) {
                     val firebaseNote = childDataSnapshot.getValue(FirebaseDBNote::class.java)
                     val uiNoteModel = NoteModel(firebaseNote!!.note)
+
 
                     list.add(uiNoteModel)
                 }

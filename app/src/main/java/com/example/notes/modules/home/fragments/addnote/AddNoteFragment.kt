@@ -25,27 +25,30 @@ class AddNoteFragment: DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         bt1.setOnClickListener {
-            var databaseReference = FirebaseDatabase.getInstance().getReference()
+            var databaseReference = FirebaseDatabase.getInstance().reference
             databaseReference = databaseReference.child("123").child("folders").child(parentFirebaseId!!).child("notes")
 
             val noteText = et.text.toString()
             val note = FirebaseDBNote(noteText)
 
-            val id = databaseReference.push().key
-            databaseReference.child(id!!).setValue(note, object: DatabaseReference.CompletionListener {
-                override fun onComplete(p0: DatabaseError?, p1: DatabaseReference) {
-                    println("xxxx" + p0)
-                    println("xxxy" + p1)
+            Thread(Runnable {
+                val noteEntity = NoteEntity()
+                noteEntity.text = noteText
+                noteEntity.parentFirebaseId = parentFirebaseId
+                NotesDatabase.getDatabase(activity!!.applicationContext).getNotesDao().insert(noteEntity)
+
+                val id = databaseReference.push().key
+                databaseReference.child(id!!).setValue(note) { p0, p1 ->
+                    println("xxxx$p0")
+                    println("xxxy$p1")
 
                     Thread(Runnable {
-                        val noteEntity = NoteEntity()
-                        noteEntity.text = noteText
-                        noteEntity.firebaseId = p1.key
-                        noteEntity.parentFirebaseId = parentFirebaseId
-                        NotesDatabase.getDatabase(activity!!.applicationContext).getNotesDao().insert(noteEntity)
+                        NotesDatabase.getDatabase(activity!!.applicationContext).getNotesDao().updateNote(noteText, p1.key!!, parentFirebaseId!!, true)
                     }).start()
                 }
-            })
+            }).start()
+
+
         }
     }
 }
